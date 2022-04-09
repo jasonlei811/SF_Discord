@@ -16,8 +16,33 @@ url='https://api.yelp.com/v3/businesses/search'
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    try:
+        print('We have logged in as {0.user}'.format(client))
+        city = "agasfasfasd"
+        food_type = "asgafadfa"
+
+        params={'term': food_type, 'location': city}  
+        req = requests.get(url, params=params, headers=headers)
+        parsed = json.loads(req.text)
+
+        embed = discord.Embed()
+        channel = client.get_channel(960313523324452906)
+        await channel.send('Here are some options!')
+        # message = ''
+        message = ''
+        for business in parsed['businesses'][0:19]:
+            business_name = business['name']
+            business_rating = business['rating']
+            business_link = business['url']
+            message += (f'[{business_name}]({business_link}) - {str(business_rating)}\n\n')
+        embed.description = message
+        await channel.send(embed=embed)
+    except KeyError:
+        await channel.send("Looks like you didn't put in a real city or type of food. (Ex: /food burlingame korean")
+
+
 from discord.ext import commands
+
 
 """
 to do: send in one whole message instead of one by one
@@ -44,13 +69,21 @@ async def food(ctx, arg1, arg2):
     params={'term': food_type, 'location': city}  
     req = requests.get(url, params=params, headers=headers)
     parsed = json.loads(req.text)
-    
 
-    for business in parsed['businesses']:
-        print(business)
+    embed = discord.Embed()
+    
+    await ctx.send('Here are some options!')
+    # message = ''
+    message = ''
+    for business in parsed['businesses'][0:15]:
         business_name = business['name']
         business_rating = business['rating']
-        await ctx.send(business_name + ' - ' +  str(business_rating))
+        business_link = business['url']
+
+        message += business_name + ' - ' +  str(business_rating) + ' - ' + '[yelplink]' + "(" + business_link + ")" + '\n' + '\n'
+        
+    embed.description = message
+    await ctx.send(embed=embed)
 
 # or:
 
