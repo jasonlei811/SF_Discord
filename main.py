@@ -9,7 +9,7 @@ from discord.ext import commands
 
 #discord login token
 TOKEN = os.getenv('DISCORD_TOKEN')
-print("hello")
+
 client = discord.Client()
 client = commands.Bot(command_prefix='.')
 client.remove_command("help")
