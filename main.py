@@ -58,3 +58,6 @@ async def help(ctx):
 
 
 client.run(TOKEN)
+
+#put number of reviews
+#
