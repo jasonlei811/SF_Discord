@@ -41,8 +41,13 @@ async def food(ctx, arg1, arg2):
         for business in parsed['businesses'][0:15]:
             business_name = business['name']
             business_rating = business['rating']
+            star_rating = int(business['rating'])
+            num_of_stars = ''
+            for star in range(0,star_rating):
+                num_of_stars += ':star:'
             business_link = business['url']
-            message += (f'[{business_name}]({business_link}) - {str(business_rating)}\n\n')
+            yelp_rating = business['review_count']
+            message += (f'[{business_name}]({business_link}) \nRating: {str(business_rating)} {num_of_stars} \n Reviews: {str(yelp_rating)}\n\n')
         embed.description = message
         await ctx.send(embed=embed)
     except KeyError:
