@@ -35,20 +35,23 @@ async def food(ctx, arg1, arg2):
         parsed = json.loads(req.text)
 
         embed = discord.Embed()
-        
-        await ctx.send('Here are some options!')
-        message = ''
+        embed = discord.Embed(title='Yelp')
+
         for business in parsed['businesses'][0:15]:
             business_name = business['name']
             business_rating = business['rating']
-            star_rating = int(business['rating'])
             num_of_stars = ''
-            for star in range(0,star_rating):
+            for _ in range(0,int(business['rating'])):
                 num_of_stars += ':star:'
             business_link = business['url']
             yelp_rating = business['review_count']
-            message += (f'[{business_name}]({business_link}) \nRating: {str(business_rating)} {num_of_stars} \n Reviews: {str(yelp_rating)}\n\n')
-        embed.description = message
+            embed.add_field(name = business_name, value = f'{num_of_stars}\n[**Rating**: {str(business_rating)}\n **Reviews:** {str(yelp_rating)}]({business_link})\n\u200b', inline = True)
+
+        embed.description = f'Here some some options for {food_type.upper()} food in {city.upper()}!'
+        
+        
+        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+
         await ctx.send(embed=embed)
     except KeyError:
         await ctx.send("Looks like you didn't put in a real city or type of food. (Ex: .food burlingame korean)")
