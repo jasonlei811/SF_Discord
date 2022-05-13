@@ -35,9 +35,10 @@ async def food(ctx, arg1, arg2):
         parsed = json.loads(req.text)
 
         embed = discord.Embed()
-        embed = discord.Embed(title='Yelp')
+
 
         for business in parsed['businesses'][0:15]:
+            embed.set_thumbnail(url=business['image_url'])
             business_name = business['name']
             business_rating = business['rating']
             num_of_stars = ''
@@ -47,10 +48,11 @@ async def food(ctx, arg1, arg2):
             yelp_rating = business['review_count']
             embed.add_field(name = business_name, value = f'{num_of_stars}\n[**Rating**: {str(business_rating)}\n **Reviews:** {str(yelp_rating)}]({business_link})\n\u200b', inline = True)
 
-        embed.description = f'Here some some options for {food_type.upper()} food in {city.upper()}!'
-        
+        embed.description = f'Here some some options for {food_type} food in {city.capitalize()}!'
+
         
         embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+        embed.set_author(name='Yelp',icon_url='https://drjamestalkington.com/wp-content/uploads/2021/02/yelp-logo-png-round-8-copy.png')
 
         await ctx.send(embed=embed)
     except KeyError:
@@ -59,13 +61,10 @@ async def food(ctx, arg1, arg2):
 @client.command()
 async def help(ctx):
     embed = discord.Embed()
-    embed.description = "Hey! This is just a simple yelp bot that gives you some food recs in the city of your choice. Try using .food [INSERT CITY HERE] [INSERT FOOD TYPE HERE]"
+    embed.description = "Hey! This is just a simple yelp bot that gives you some food recs in the city of your choice. Try using .food [INSERT CITY HERE NO SPACES] [INSERT FOOD TYPE HERE]"
     await ctx.send(embed = embed)
             
 
-###insert test change here###
 
 client.run(TOKEN)
 
-#put number of reviews
-#
